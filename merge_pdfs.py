@@ -1,7 +1,6 @@
 import os
 import sys
-import PyPDF2
-from PyPDF2 import PdfFileReader, PdfFileWriter
+from PyPDF2 import PdfReader, PdfWriter
 
 def get_pdf_files(input_dir):
     # Get all .pdf files in the directory
@@ -14,16 +13,16 @@ def get_pdf_files(input_dir):
     return numbered_pdfs
 
 def merge_pdfs(input_dir, file_names, output_path):
-    pdf_writer = PdfFileWriter()
+    pdf_writer = PdfWriter()
 
     for file_name in file_names:
         file_path = os.path.join(input_dir, file_name)
-        pdf_reader = PdfFileReader(file_path)
+        pdf_reader = PdfReader(file_path)
         
         # Skip the first page and add the rest
-        for page_num in range(1, pdf_reader.getNumPages()):
-            page = pdf_reader.getPage(page_num)
-            pdf_writer.addPage(page)
+        for page_num in range(1, len(pdf_reader.pages)):
+            page = pdf_reader.pages[page_num]
+            pdf_writer.add_page(page)
     
     # Write the output PDF
     with open(output_path, 'wb') as out:
